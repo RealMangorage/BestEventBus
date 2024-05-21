@@ -11,7 +11,7 @@ public class AlternateEventListenerList implements IListenerList<AlternateEventS
     private final List<BiConsumer<Object, AlternateEventState>> listeners = new ArrayList<>();
     private final EventKey<?, AlternateEventState> EVENT_KEY;
 
-    public AlternateEventListenerList(EventKey<?, AlternateEventState> key) {
+    public AlternateEventListenerList(EventKey<?, AlternateEventState> key, IListenerList<AlternateEventState> parent) {
         this.EVENT_KEY = key;
     }
 

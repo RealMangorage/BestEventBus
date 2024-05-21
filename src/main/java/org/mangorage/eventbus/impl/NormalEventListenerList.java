@@ -10,9 +10,11 @@ import java.util.function.BiConsumer;
 public class NormalEventListenerList implements IListenerList<NormalEventState> {
     private final List<BiConsumer<Object, NormalEventState>> LISTENERS = new ArrayList<>();
     private final EventKey<?, NormalEventState> EVENT_KEY;
+    private final IListenerList<NormalEventState> parent;
 
-    public NormalEventListenerList(EventKey<?, NormalEventState> key) {
+    public NormalEventListenerList(EventKey<?, NormalEventState> key, IListenerList<NormalEventState> parent) {
         this.EVENT_KEY = key;
+        this.parent = parent;
     }
 
     @Override
@@ -31,5 +33,6 @@ public class NormalEventListenerList implements IListenerList<NormalEventState> 
         for (BiConsumer<Object, NormalEventState> listener : LISTENERS) {
             listener.accept(object, state);
         }
+        if (this.parent != null) parent.post(object);
     }
 }

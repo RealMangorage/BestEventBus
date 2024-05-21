@@ -13,9 +13,17 @@ import java.util.function.Supplier;
 
 public record EventKey<E, S extends IEventState>(Class<E> eClass, Class<S> stateClass, IListenerListProvider<S> supplier) {
     public static final EventKey<Integer, NormalEventState> EXAMPLE_EVENT = new EventKey<>(Integer.class, NormalEventState.class, NormalEventListenerList::new);
+    public static final EventKey<Number, NormalEventState> EXAMPLE_EVENT_3 = new EventKey<>(Number.class, NormalEventState.class, NormalEventListenerList::new);
+
     public static final EventKey<Integer, AlternateEventState> EXAMPLE_EVENT_2 = new EventKey<>(Integer.class, AlternateEventState.class, AlternateEventListenerList::new);
 
+    public void post(E object, EventBus bus) {
+        bus.post(object, this);
+    }
 
+    public EventKey<E, S> createNew(Class<?> eClass) {
+        return (EventKey<E, S>) new EventKey<>(eClass, stateClass, supplier);
+    }
 
     @Override
     public int hashCode() {
