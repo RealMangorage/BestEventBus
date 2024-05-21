@@ -48,13 +48,20 @@ public class EventBus {
             System.out.println("With eventState of -> " + s.getClass());
         });
 
-        bus.addListener(EventKey.EXAMPLE_EVENT, (o, s) -> {
+        bus.addListener(EventKey.EXAMPLE_EVENT_2, (o, s) -> {
+            s.cancel();
             System.out.println("Got an event for " + o.getClass());
             System.out.println("With eventState of -> " + s.getClass());
         });
 
-        EventKey.EXAMPLE_EVENT.post(10, bus);
-        EventKey.EXAMPLE_EVENT_3.post(10, bus);
+        bus.addListener(EventKey.EXAMPLE_EVENT_2, (o, s) -> {
+            System.out.println("Got an event for " + o.getClass());
+            System.out.println("With eventState of -> " + s.getClass());
+        });
+
+         // EventKey.EXAMPLE_EVENT.post(10, bus);
+        EventKey.EXAMPLE_EVENT_2.post(10, bus);
+        //EventKey.EXAMPLE_EVENT_3.post(10, bus);
 
     }
 }

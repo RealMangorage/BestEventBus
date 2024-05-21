@@ -29,6 +29,7 @@ public class AlternateEventListenerList implements IListenerList<AlternateEventS
     public void post(Object object) {
         var state = new AlternateEventState();
         for (BiConsumer<Object, AlternateEventState> listener : listeners) {
+            if (state.isCancelled()) break;
             listener.accept(object, state);
         }
     }
