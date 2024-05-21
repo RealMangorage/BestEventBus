@@ -1,4 +1,8 @@
-package org.mangorage.eventbus;
+package org.mangorage.eventbus.interfaces;
 
-public interface IListenerList {
+import java.util.function.BiConsumer;
+
+public interface IListenerList<S extends IEventState> {
+    void register(BiConsumer<?, S> consumer);
+    void post(Object object);
 }

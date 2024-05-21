@@ -1,4 +1,4 @@
-package org.mangorage.eventbus;
+package org.mangorage.eventbus.impl;
 
 public class ListenerList {
 }

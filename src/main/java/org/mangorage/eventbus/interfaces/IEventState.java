@@ -1,2 +1,4 @@
-package org.mangorage.eventbus;public interface IEventState {
+package org.mangorage.eventbus.interfaces;
+
+public interface IEventState {
 }

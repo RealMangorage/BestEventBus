@@ -1,3 +1,7 @@
-package org.mangorage.eventbus;
+package org.mangorage.eventbus.impl;
 
-public class NormalEventState { }
+import org.mangorage.eventbus.interfaces.IEventState;
+
+public class NormalEventState implements IEventState {
+
+}
