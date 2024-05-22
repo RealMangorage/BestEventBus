@@ -16,19 +16,19 @@ public abstract class AbstractListenerList<S extends IEventState> implements ILi
     private final List<BiConsumer<Object, S>> listeners = new ArrayList<>();
     private final EventKey<?, S> eventKey;
     private final IListenerList<S> parent;
-    private final Lazy<List<BiConsumer<Object, S>>> allListeners;
     private final Set<IListenerList<S>> children = new HashSet<>();
+    private final Lazy<BiConsumer<Object, S>[]> allListeners;
 
     public AbstractListenerList(EventKey<?, S> key, IListenerList<S> parent) {
         this.eventKey = key;
         this.parent = parent;
-        this.allListeners = Lazy.of(() -> {
+        this.allListeners = Lazy.concurrentOf(() -> {
             if (parent != null) {
-                return Stream.of(listeners, parent.getListeners())
+                return Stream.of(listeners, List.of(parent.getListeners()))
                         .flatMap(List::stream)
-                        .toList();
+                        .toArray(BiConsumer[]::new);
             }
-            return listeners;
+            return listeners.toArray(BiConsumer[]::new);
         });
         if (parent != null) parent.addChild(this);
     }
@@ -43,7 +43,7 @@ public abstract class AbstractListenerList<S extends IEventState> implements ILi
         children.add(child);
     }
 
-    public List<BiConsumer<Object, S>> getListeners() {
+    public BiConsumer<Object, S>[] getListeners() {
         return allListeners.get();
     }
 

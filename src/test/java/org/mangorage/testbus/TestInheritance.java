@@ -5,12 +5,9 @@ import org.mangorage.eventbus.EventKey;
 import org.mangorage.eventbus.impl.NormalEventListenerList;
 import org.mangorage.eventbus.impl.NormalEventState;
 
+
 public class TestInheritance {
-
-
-    public abstract class SomethingLMAO extends BaseEvent {}
-
-    public static class BaseEvent extends Object{
+    public static class BaseEvent {
         public final static class MySubEvent extends BaseEvent {}
         public final static class MyOtherSubEvent extends BaseEvent {}
     }
@@ -40,37 +37,7 @@ public class TestInheritance {
     );
 
 
-
     public static void main(String[] args) {
         var bus = EventBus.create();
-
-        bus.addListener(OBJECT, (o, s) -> {
-            System.out.println("-------------------------------------------------------");
-            System.out.println("Object Event Listener Got Event -> " + o + " With State -> " + s.getClass());
-            System.out.println("-------------------------------------------------------");
-        });
-
-        bus.addListener(BASE_EVENT, (o, s) -> {
-            System.out.println("-------------------------------------------------------");
-            System.out.println("Base Event Listener Got Event -> " + o + " With State -> " + s.getClass());
-            System.out.println("-------------------------------------------------------");
-        });
-
-        bus.addListener(MY_SUB_EVENT, (o, s) -> {
-            System.out.println("-------------------------------------------------------");
-            System.out.println("My Sub Event Event Listener Got Event -> " + o + " With State -> " + s.getClass());
-            System.out.println("-------------------------------------------------------");
-        });
-
-        bus.addListener(MY_OTHER_SUB_EVENT, (o, s) -> {
-            System.out.println("-------------------------------------------------------");
-            System.out.println("Ny Other Sub Event Listener Got Event -> " + o + " With State -> " + s.getClass());
-            System.out.println("-------------------------------------------------------");
-        });
-
-        MY_OTHER_SUB_EVENT.post(new BaseEvent.MyOtherSubEvent(), bus);
-        MY_SUB_EVENT.post(new BaseEvent.MySubEvent(), bus);
-        OBJECT.post("LOL!", bus);
-        var a =1;
     }
 }
