@@ -69,5 +69,8 @@ public class TestInheritance {
         });
 
         MY_OTHER_SUB_EVENT.post(new BaseEvent.MyOtherSubEvent(), bus);
+        MY_SUB_EVENT.post(new BaseEvent.MySubEvent(), bus);
+        OBJECT.post("LOL!", bus);
+        var a =1;
     }
 }
