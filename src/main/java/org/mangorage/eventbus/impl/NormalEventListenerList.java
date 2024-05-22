@@ -15,7 +15,7 @@ public class NormalEventListenerList extends AbstractListenerList<NormalEventSta
     @Override
     public void post(Object object) {
         var state = new NormalEventState();
-        for (BiConsumer<Object, NormalEventState> listener : getAllListeners()) {
+        for (BiConsumer<Object, NormalEventState> listener : getListeners()) {
             listener.accept(object, state);
         }
     }

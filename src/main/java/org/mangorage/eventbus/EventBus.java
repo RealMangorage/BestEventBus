@@ -35,7 +35,7 @@ public final class EventBus implements IEventBus {
             return (IListenerList<S>) list;
         }
 
-        if (eventKey.eClass() == Object.class) {
+        if (eventKey.eClass() == null) {
             return null;
         }
 
