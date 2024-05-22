@@ -4,6 +4,7 @@ import org.mangorage.eventbus.impl.AlternateEventListenerList;
 import org.mangorage.eventbus.impl.AlternateEventState;
 import org.mangorage.eventbus.impl.NormalEventState;
 import org.mangorage.eventbus.impl.NormalEventListenerList;
+import org.mangorage.eventbus.interfaces.IEventBus;
 import org.mangorage.eventbus.interfaces.IEventState;
 import org.mangorage.eventbus.interfaces.IListenerList;
 import org.mangorage.eventbus.interfaces.IListenerListProvider;
@@ -17,7 +18,13 @@ public record EventKey<E, S extends IEventState>(Class<E> eClass, Class<S> state
 
     public static final EventKey<Integer, AlternateEventState> EXAMPLE_EVENT_2 = new EventKey<>(Integer.class, AlternateEventState.class, AlternateEventListenerList::new);
 
-    public void post(E object, EventBus bus) {
+
+    public static <E, S extends IEventState> EventKey<E, S> create(Class<E> eClass, Class<S> stateClass, IListenerListProvider<S> supplier) {
+        return new EventKey<>(eClass, stateClass, supplier);
+    }
+
+
+    public void post(E object, IEventBus bus) {
         bus.post(object, this);
     }
 

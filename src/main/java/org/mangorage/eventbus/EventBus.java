@@ -1,5 +1,6 @@
 package org.mangorage.eventbus;
 
+import org.mangorage.eventbus.interfaces.IEventBus;
 import org.mangorage.eventbus.interfaces.IEventState;
 import org.mangorage.eventbus.interfaces.IListenerList;
 
@@ -7,10 +8,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
-public class EventBus {
+public final class EventBus implements IEventBus {
+
+    public static IEventBus create() {
+        return new EventBus();
+    }
+
     private final Map<EventKey<?, ?>, IListenerList<? extends IEventState>> listeners = new ConcurrentHashMap<>();
 
-    @SuppressWarnings("unchecked")
+    private EventBus() {}
+
+    @SuppressWarnings("all")
     public <E, S extends IEventState> void addListener(EventKey<E, S> eventKey, BiConsumer<E, S> consumer) {
         getListenerList(eventKey).register(consumer, eventKey);
     }
@@ -20,7 +28,8 @@ public class EventBus {
         if (list != null) list.post(object);
     }
 
-    public <S extends IEventState> IListenerList<S> getListenerList(EventKey<?, S> eventKey) {
+    @SuppressWarnings("unchecked")
+    private  <S extends IEventState> IListenerList<S> getListenerList(EventKey<?, S> eventKey) {
         var list = listeners.get(eventKey);
         if (list != null) {
             return (IListenerList<S>) list;
@@ -31,37 +40,5 @@ public class EventBus {
         }
 
         return (IListenerList<S>) listeners.computeIfAbsent(eventKey, l -> eventKey.supplier().create(eventKey, getListenerList(eventKey.createNew(eventKey.eClass().getSuperclass()))));
-    }
-
-
-    public static void main(String[] args) {
-        EventBus bus = new EventBus();
-
-        bus.addListener(EventKey.EXAMPLE_EVENT_3, (o, s) -> {
-            System.out.println("Got an event for " + o.getClass());
-            System.out.println("With eventState of -> " + s.getClass());
-            System.out.println("Number Listener");
-        });
-
-        bus.addListener(EventKey.EXAMPLE_EVENT, (o, s) -> {
-            System.out.println("Got an event for " + o.getClass());
-            System.out.println("With eventState of -> " + s.getClass());
-        });
-
-        bus.addListener(EventKey.EXAMPLE_EVENT_2, (o, s) -> {
-            s.cancel();
-            System.out.println("Got an event for " + o.getClass());
-            System.out.println("With eventState of -> " + s.getClass());
-        });
-
-        bus.addListener(EventKey.EXAMPLE_EVENT_2, (o, s) -> {
-            System.out.println("Got an event for " + o.getClass());
-            System.out.println("With eventState of -> " + s.getClass());
-        });
-
-         // EventKey.EXAMPLE_EVENT.post(10, bus);
-        EventKey.EXAMPLE_EVENT_2.post(10, bus);
-        //EventKey.EXAMPLE_EVENT_3.post(10, bus);
-
     }
 }
